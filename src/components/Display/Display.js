@@ -39,7 +39,7 @@ setInterval(() => {
             sprite.dir -= Math.PI/4;
         }
         sprites.forEach(sprite0 => {
-            if(Math.abs(sprite.x - sprite0.x) < COLLISION_BOX && Math.abs(sprite.y - sprite0.y) < COLLISION_BOX){
+            if(sprite !== sprite0 && Math.abs(sprite.x - sprite0.x) < COLLISION_BOX && Math.abs(sprite.y - sprite0.y) < COLLISION_BOX){
                 sprite.dir += Math.PI;
                 sprite0.dir += Math.PI;
                 if(sprite.type === 0 && sprite0.type === 1){
