@@ -32,11 +32,13 @@ setInterval(() => {
     sprites.forEach(sprite => {
         sprite.x = sprite.x + SPEED * Math.cos(sprite.dir);
         sprite.y = sprite.y + SPEED * Math.sin(sprite.dir);
-        if(sprite.x < 0 || sprite.y < 0){
-            sprite.dir += Math.PI/4;
+        //bottom and top
+        if(sprite.y < 0 || sprite.y > 1){
+            sprite.dir += Math.PI/2 - sprite.dir;
         }
-        if(sprite.x > 1 || sprite.y > 1 ){
-            sprite.dir -= Math.PI/4;
+        //Left and right
+        if(sprite.x > 1 || sprite.x < 0 ){
+            sprite.dir -= -1 * Math.PI - sprite.dir;
         }
         sprites.forEach(sprite0 => {
             if(sprite !== sprite0 && Math.abs(sprite.x - sprite0.x) < COLLISION_BOX && Math.abs(sprite.y - sprite0.y) < COLLISION_BOX){
