@@ -1,41 +1,58 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Victor from "victor";
+import Rock from "../../assets/rock-svgrepo-com.svg"
+import Paper from "../../assets/paper-svgrepo-com.svg"
+import Scissors from "../../assets/scissors-svgrepo-com.svg"
 
+const rock_img = new Image(24,24)
+rock_img.src = Rock
+const paper_img = new Image(24,24)
+paper_img.src = Paper
+const scissors_img = new Image(24,24)
+scissors_img.src = Scissors
 const MILLIS = 1000;
-const FRAMERATE = 30;
-const SPEED = 0.0001;
-const COLLISION_BOX = 0.010;
+const FRAMERATE = 60;
+const SPEED = 0.0008;
+const COLLISION_BOX = 0.028;
 
 export default function Display({arr, width, height}){
-const canvasRef = useRef(null)
-const [sprites, setSprites] = useState(arr)
-
+const canvasRef = useRef()
+const [sprites] = useState(arr)
 useEffect(() => {
-    const canvas = canvasRef.current
-    const context = canvas.getContext('2d')
-    context.clearRect(0, 0, width, height)
-    context.fillStyle = "#000000"
-    context.strokeRect(0, 0, width, height)
-    sprites.forEach(sprite => {
-        if(sprite.type === 0)
-            context.fillStyle = "#FF0000"
-        if(sprite.type === 1)
-            context.fillStyle = "#00FF00"
-        if(sprite.type === 2)
-            context.fillStyle = "#0000FF"
+    const drawing = setInterval(() => {
+        const canvas = canvasRef.current
+        const context = canvas.getContext('2d')
+        context.clearRect(0, 0, width, height)
+        context.fillStyle = "#000000"
+        context.strokeRect(0, 0, width, height)
         context.beginPath()
-        context.ellipse(Math.round(sprite.x * width), Math.round(sprite.y * height), COLLISION_BOX*width, COLLISION_BOX*height,0, 0, 2*Math.PI, true);
-        context.fill()
-    });
+        sprites.forEach(sprite => {
+            if(sprite.type === 0)
+                context.drawImage(rock_img, sprite.x*width, sprite.y*height)
+            if(sprite.type === 1)
+                context.drawImage(paper_img, sprite.x*width, sprite.y*height)
+            if(sprite.type === 2)
+                context.drawImage(scissors_img, sprite.x*width, sprite.y*height)
+            context.fill()
+        });
+    
+    },MILLIS/FRAMERATE)
+    return () => clearInterval(drawing)
+}, [canvasRef, sprites, height, width])
 
-},[sprites, width, height])
 setInterval(() => {
     sprites.forEach(sprite => {
         sprite.x = sprite.x + SPEED * Math.cos(sprite.dir.direction());
         sprite.y = sprite.y + SPEED * Math.sin(sprite.dir.direction());
         //Left and right
-        if(sprite.x > 1-COLLISION_BOX || sprite.x < COLLISION_BOX ){
+        if(sprite.x > 1-COLLISION_BOX ){
             sprite.dir = sprite.dir.add(Victor(-2*sprite.dir.dot(Victor(1, 0)), 0) )
+            
+        }
+        //Left and right
+        if(sprite.x < COLLISION_BOX ){
+            sprite.dir = sprite.dir.add(Victor(-2*sprite.dir.dot(Victor(1, 0)), 0) )
+            
         }
         //bottom and top
         if(sprite.y < COLLISION_BOX || sprite.y > 1-COLLISION_BOX){
@@ -73,7 +90,6 @@ setInterval(() => {
             }
         })
     })
-   setSprites([...sprites])
-   }, MILLIS/FRAMERATE)
+   }, 10)
     return <canvas ref = {canvasRef} width={width} height={height} style={{width:`100%`, height:`100%`}} onClick={e => console.log(e)}/>
 }
