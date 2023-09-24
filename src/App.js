@@ -1,3 +1,4 @@
+import Victor from 'victor';
 import './App.css';
 import Display from './components/Display/Display';
 
@@ -5,18 +6,11 @@ import Display from './components/Display/Display';
 const SIZE = 1000
 function App() {
   const sprites = []
-  for(let i = 0;i<1;i++){
+  for(let i = 0;i<10;i++){
     sprites.push({
       x:Math.random(),
       y:Math.random(),
-      dir:Math.random()*2*Math.PI,
-      color:`rgb(${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)})`,
-      type:Math.trunc(Math.random() * 3)
-    })
-    sprites.push({
-      x:Math.random(),
-      y:Math.random(),
-      dir:Math.random()*2*Math.PI,
+      dir:new Victor(Math.random(), Math.random()),
       color:`rgb(${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)}, ${Math.round(Math.random() * 255)})`,
       type:Math.trunc(Math.random() * 3)
     })
