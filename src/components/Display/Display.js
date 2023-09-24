@@ -22,8 +22,11 @@ useEffect(() => {
             context.fillStyle = "#00FF00"
         if(sprite.type === 2)
             context.fillStyle = "#0000FF"
-        context.fillRect(Math.round(sprite.x * width), Math.round(sprite.y * height), COLLISION_BOX*width, COLLISION_BOX*height);
+        context.beginPath()
+        context.ellipse(Math.round(sprite.x * width), Math.round(sprite.y * height), COLLISION_BOX*width, COLLISION_BOX*height,0, 0, 2*Math.PI, true);
+        context.fill()
     });
+
 },[sprites, width, height])
 setInterval(() => {
     sprites.forEach(sprite => {
@@ -57,5 +60,5 @@ setInterval(() => {
     })
    setSprites([...sprites])
    }, MILLIS/FRAMERATE)
-    return <canvas ref = {canvasRef} width={width} height={height} style={{width:`${width}px`, height:`${height}px`}} onClick={e => console.log(e)}/>
+    return <canvas ref = {canvasRef} width={width} height={height} style={{width:`100%`, height:`100%`}} onClick={e => console.log(e)}/>
 }
